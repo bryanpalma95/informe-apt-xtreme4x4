@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio de Bryan Palma — Desarrollador Web" />
+  <title>Bryan Palma | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a24;
+      --surface2: #22222f;
+      --border: #2e2e3e;
+      --accent: #7c6af7;
+      --accent2: #f76ac8;
+      --text: #e8e8f0;
+      --muted: #8888a0;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 106, 247, 0.12);
+      border: 1px solid rgba(124, 106, 247, 0.3);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #6a58e0; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover { background: var(--surface2); transform: translateY(-1px); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,106,247,0.06), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(124, 106, 247, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: rgba(124, 106, 247, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(124, 106, 247, 0.2);
+    }
+
+    .tag.green {
+      background: rgba(52, 211, 153, 0.1);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.2);
+    }
+
+    .tag.pink {
+      background: rgba(247, 106, 200, 0.1);
+      color: var(--accent2);
+      border-color: rgba(247, 106, 200, 0.2);
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 18px;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .card:hover .arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .hero { padding: 48px 16px 32px; }
+      .projects-section { padding: 32px 16px 60px; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-tag">Disponible para proyectos</span>
+    <h1>Hola, soy <span>Bryan Palma</span></h1>
+    <p>Desarrollador web con foco en interfaces modernas y aplicaciones funcionales. Aquí encontrarás una selección de mis proyectos.</p>
+    <div class="hero-links">
+      <a class="btn btn-primary" href="https://github.com/bryanpalma95" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub
+      </a>
+      <a class="btn btn-ghost" href="mailto:brian.palma92@gmail.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Contacto
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section class="projects-section">
+    <p class="section-label">Proyectos</p>
+    <div class="projects-grid">
+
+      <!-- Skylabs -->
+      <a class="card" href="https://bryanpalma95.github.io/Proyectos.github.io" target="_blank" rel="noopener">
+        <div class="card-icon">🚀</div>
+        <div class="card-title">Skylabs</div>
+        <div class="card-desc">Sitio web corporativo para empresa de desarrollo y mantención de software. Diseño one-page con Bootstrap.</div>
+        <div class="card-footer">
+          <div class="tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">Bootstrap</span>
+          </div>
+          <span class="arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Tu Guía de Turismo -->
+      <a class="card" href="https://bryanpalma95.github.io/Tuguiadeturismo" target="_blank" rel="noopener">
+        <div class="card-icon">🗺️</div>
+        <div class="card-title">Tu Guía de Turismo</div>
+        <div class="card-desc">App web para descubrir y gestionar servicios turísticos en Chile. Incluye 73 servicios reales con búsqueda en tiempo real.</div>
+        <div class="card-footer">
+          <div class="tags">
+            <span class="tag green">JavaScript</span>
+            <span class="tag">CSS3</span>
+            <span class="tag">LocalStorage</span>
+          </div>
+          <span class="arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Chavito -->
+      <a class="card" href="https://bryanpalma95.github.io/chavito" target="_blank" rel="noopener">
+        <div class="card-icon">🍔</div>
+        <div class="card-title">La Pica del Chavito</div>
+        <div class="card-desc">Sitio web para local de comida. Diseño simple y directo con HTML puro.</div>
+        <div class="card-footer">
+          <div class="tags">
+            <span class="tag pink">HTML</span>
+          </div>
+          <span class="arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Ver todos -->
+      <a class="card" href="https://github.com/bryanpalma95" target="_blank" rel="noopener">
+        <div class="card-icon">📁</div>
+        <div class="card-title">Ver todos los proyectos</div>
+        <div class="card-desc">Explora el resto de repositorios y proyectos en GitHub.</div>
+        <div class="card-footer">
+          <div class="tags">
+            <span class="tag">GitHub</span>
+          </div>
+          <span class="arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>Hecho por <a href="https://github.com/bryanpalma95">Bryan Palma</a> · <a href="mailto:brian.palma92@gmail.com">brian.palma92@gmail.com</a></p>
+  </footer>
+
+</body>
+</html>
