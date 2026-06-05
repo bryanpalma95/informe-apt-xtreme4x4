@@ -785,27 +785,7 @@
       transition: all 0.2s;
     }
     .print-btn:hover { background: #c0430f; transform: translateY(-2px); }
-    .word-btn {
-      position: fixed;
-      bottom: 28px;
-      right: 168px;
-      background: #1e5fa8;
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 22px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(30,95,168,0.4);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-    .word-btn:hover { background: #154a87; transform: translateY(-2px); }
-    @media print { .print-btn, .word-btn { display: none !important; } }
+    @media print { .print-btn { display: none !important; } }
   </style>
 </head>
 <body>
@@ -1411,118 +1391,6 @@
   </svg>
   Exportar PDF
 </button>
-
-<!-- Botón exportar Word -->
-<button class="word-btn" onclick="exportWord()">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <polyline points="14 2 14 8 20 8"/>
-    <line x1="16" y1="13" x2="8" y2="13"/>
-    <line x1="16" y1="17" x2="8" y2="17"/>
-    <polyline points="10 9 9 9 8 9"/>
-  </svg>
-  Exportar Word
-</button>
-
-<script>
-function exportWord() {
-  // Recopilar todo el contenido del informe
-  const sections = document.querySelector('.main');
-
-  const style = `
-    <style>
-      body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #111; line-height: 1.5; margin: 2cm; }
-      h1 { font-size: 22pt; color: #c0430f; margin-bottom: 6pt; }
-      h2 { font-size: 16pt; color: #c0430f; border-bottom: 2px solid #c0430f; padding-bottom: 4pt; margin-top: 24pt; margin-bottom: 10pt; page-break-after: avoid; }
-      h3 { font-size: 12pt; color: #b07800; margin-top: 16pt; margin-bottom: 6pt; page-break-after: avoid; }
-      h4 { font-size: 11pt; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt; }
-      p  { margin-bottom: 8pt; font-size: 11pt; }
-      ul, ol { margin-left: 20pt; margin-bottom: 8pt; }
-      li { margin-bottom: 4pt; font-size: 11pt; }
-      table { width: 100%; border-collapse: collapse; margin: 10pt 0; font-size: 10pt; }
-      th { background-color: #c0430f; color: white; padding: 6pt 8pt; text-align: left; font-size: 9pt; }
-      td { padding: 5pt 8pt; border: 1px solid #ccc; vertical-align: top; }
-      tr:nth-child(even) td { background-color: #f9f9f9; }
-      .callout { border-left: 4px solid #c0430f; background: #fff8f5; padding: 8pt 12pt; margin: 10pt 0; }
-      .callout.warning { border-left-color: #b07800; background: #fffbf0; }
-      .cover { text-align: center; border: 2px solid #c0430f; padding: 32pt; margin-bottom: 32pt; page-break-after: always; }
-      .cover h1 { font-size: 26pt; }
-      .cover-badge { background: #fde8de; border: 1px solid #c0430f; color: #c0430f; padding: 3pt 10pt; border-radius: 4pt; font-size: 10pt; display: inline-block; margin-bottom: 12pt; }
-      .cover-meta { display: flex; flex-wrap: wrap; gap: 10pt; margin-top: 20pt; justify-content: center; }
-      .meta-item { border: 1px solid #ccc; padding: 8pt 12pt; min-width: 160pt; text-align: left; }
-      .meta-label { font-size: 8pt; color: #555; text-transform: uppercase; font-weight: bold; }
-      .meta-value { font-size: 10pt; }
-      .section-header { display: flex; align-items: center; gap: 10pt; border-bottom: 2px solid #c0430f; padding-bottom: 6pt; margin-bottom: 14pt; }
-      .section-number { background: #c0430f; color: white; font-weight: bold; padding: 3pt 7pt; border-radius: 4pt; font-size: 10pt; }
-      .section-title { font-size: 16pt; font-weight: bold; color: #111; }
-      .stat-grid { display: flex; flex-wrap: wrap; gap: 10pt; margin: 10pt 0; }
-      .stat-card { border: 1px solid #ccc; padding: 10pt; min-width: 120pt; text-align: center; }
-      .stat-val { font-size: 14pt; font-weight: bold; color: #c0430f; }
-      .stat-lbl { font-size: 8pt; color: #555; }
-      .card-grid { display: flex; flex-wrap: wrap; gap: 10pt; margin: 10pt 0; }
-      .info-card { border: 1px solid #ccc; padding: 8pt 12pt; min-width: 140pt; }
-      .info-card .label { font-size: 8pt; color: #555; text-transform: uppercase; font-weight: bold; }
-      .info-card .value { font-size: 10pt; }
-      .timeline { margin: 10pt 0 10pt 16pt; border-left: 2px solid #c0430f; padding-left: 12pt; }
-      .tl-item { margin-bottom: 12pt; }
-      .tl-title { font-weight: bold; font-size: 11pt; }
-      .tl-desc { font-size: 10pt; color: #555; }
-      .badge { padding: 2pt 6pt; border-radius: 3pt; font-size: 9pt; font-weight: bold; }
-      .badge-ok  { background: #e6f7f0; color: #1a7a50; }
-      .badge-warn{ background: #fffbf0; color: #b07800; }
-      .badge-err { background: #fff0f0; color: #cc0000; }
-      img { max-width: 100%; height: auto; margin: 8pt 0; }
-      .img-logo { display: block; max-width: 200pt; margin: 0 auto 16pt; }
-      .img-center { display: block; max-width: 300pt; margin: 10pt auto; }
-      .img-full { width: 100%; margin: 8pt 0; }
-      .img-caption { text-align: center; font-size: 9pt; color: #555; font-style: italic; margin-bottom: 8pt; }
-      .img-grid { display: flex; gap: 10pt; margin: 8pt 0; }
-      .img-grid img { width: 48%; }
-      .sidebar, .print-btn, .word-btn { display: none !important; }
-      .table-wrap { margin: 10pt 0; }
-    </style>
-  `;
-
-  const html = `
-    <!DOCTYPE html>
-    <html xmlns:o="urn:schemas-microsoft-com:office:office"
-          xmlns:w="urn:schemas-microsoft-com:office:word"
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-      <meta charset="UTF-8">
-      <meta name=ProgId content=Word.Document>
-      <meta name=Generator content="Microsoft Word 15">
-      <!--[if gte mso 9]>
-      <xml>
-        <w:WordDocument>
-          <w:View>Print</w:View>
-          <w:Zoom>100</w:Zoom>
-          <w:DoNotOptimizeForBrowser/>
-        </w:WordDocument>
-      </xml>
-      <![endif]-->
-      ${style}
-    </head>
-    <body>
-      ${sections.innerHTML}
-    </body>
-    </html>
-  `;
-
-  const blob = new Blob(['\ufeff', html], {
-    type: 'application/msword'
-  });
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'Informe-APT-Xtreme4x4-DuocUC.doc';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-</script>
 
 </body>
 </html>

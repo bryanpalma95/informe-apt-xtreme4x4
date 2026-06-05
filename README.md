@@ -19,8 +19,8 @@ El proyecto aborda la modificación y reparación especializada de vehículos 4x
 ## Estructura del proyecto
 
 ```
-├── index.html          # Portfolio personal Bryan Palma
-├── informe-apt.html    # Informe APT completo (este proyecto)
+├── index.html          # Informe APT completo (página principal)
+├── portfolio.html      # Portfolio personal Bryan Palma
 ├── img/                # Imágenes del informe (cotizaciones, layout, tablas)
 └── docs/               # Documentos fuente (.docx, .pdf)
 ```
