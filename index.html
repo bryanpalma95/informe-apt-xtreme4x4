@@ -3,363 +3,1394 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Portfolio de Bryan Palma — Desarrollador Web" />
-  <title>Bryan Palma | Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Xtreme 4x4 — Informe APT Final | DuocUC Villarrica</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0f0f13;
-      --surface: #1a1a24;
-      --surface2: #22222f;
-      --border: #2e2e3e;
-      --accent: #7c6af7;
-      --accent2: #f76ac8;
-      --text: #e8e8f0;
-      --muted: #8888a0;
-      --radius: 14px;
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface2: #1e1e1e;
+      --border: #2a2a2a;
+      --accent: #e85a1a;
+      --accent2: #f0a500;
+      --text: #f0f0f0;
+      --muted: #888;
+      --radius: 10px;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
-    /* ── HERO ── */
-    .hero {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 24px 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(124, 106, 247, 0.12);
-      border: 1px solid rgba(124, 106, 247, 0.3);
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 100px;
-      width: fit-content;
-    }
-
-    .hero-tag::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-    }
-
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 520px;
-    }
-
-    .hero-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-primary:hover { background: #6a58e0; transform: translateY(-1px); }
-
-    .btn-ghost {
+    /* ── SIDEBAR NAV ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 260px;
+      height: 100vh;
       background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 28px 0;
+      overflow-y: auto;
+      z-index: 100;
     }
 
-    .btn-ghost:hover { background: var(--surface2); transform: translateY(-1px); }
-
-    /* ── DIVIDER ── */
-    .divider {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-      border-top: 1px solid var(--border);
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
     }
 
-    /* ── PROJECTS ── */
-    .projects-section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
+    .sidebar-logo h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
     }
 
-    .section-label {
-      font-size: 12px;
-      font-weight: 600;
+    .sidebar-logo p {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .nav-group {
+      margin-bottom: 8px;
+    }
+
+    .nav-group-title {
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 24px;
+      padding: 8px 20px 4px;
     }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .nav-link {
+      display: block;
+      padding: 7px 20px;
+      font-size: 13px;
+      color: var(--muted);
       text-decoration: none;
-      color: inherit;
-      transition: all 0.2s;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text);
+      background: rgba(232, 90, 26, 0.08);
+      border-left-color: var(--accent);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: 260px;
+      padding: 48px 56px;
+      max-width: 1100px;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, #1a0a00, #0d0d0d);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 60px 48px;
+      margin-bottom: 48px;
       position: relative;
       overflow: hidden;
     }
 
-    .card::before {
+    .cover::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(124,106,247,0.06), transparent);
-      opacity: 0;
-      transition: opacity 0.2s;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(232,90,26,0.15), transparent 70%);
+      pointer-events: none;
     }
 
-    .card:hover {
-      border-color: rgba(124, 106, 247, 0.4);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-    }
-
-    .card:hover::before { opacity: 1; }
-
-    .card-icon {
-      font-size: 28px;
-      line-height: 1;
-    }
-
-    .card-title {
-      font-size: 1rem;
+    .cover-badge {
+      display: inline-block;
+      background: rgba(232,90,26,0.15);
+      border: 1px solid rgba(232,90,26,0.3);
+      color: var(--accent);
+      font-size: 12px;
       font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .cover h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .cover h1 span { color: var(--accent); }
+
+    .cover-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .meta-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 13px;
+      font-weight: 500;
       color: var(--text);
     }
 
-    .card-desc {
-      font-size: 0.875rem;
-      color: var(--muted);
-      flex: 1;
+    /* ── SECTIONS ── */
+    .section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
     }
 
-    .card-footer {
+    .section-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-number {
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent2);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 16px 0 8px;
+    }
+
+    p { color: #ccc; margin-bottom: 12px; font-size: 0.95rem; }
+
+    ul, ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    li { color: #ccc; font-size: 0.95rem; margin-bottom: 6px; }
+
+    strong { color: var(--text); }
+
+    /* ── CARDS GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .info-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .info-card .value {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: var(--surface2);
+      color: var(--accent2);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: #ccc;
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .td-check {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: rgba(232,90,26,0.08);
+      border: 1px solid rgba(232,90,26,0.25);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .callout.warning {
+      background: rgba(240,165,0,0.08);
+      border-color: rgba(240,165,0,0.25);
+      border-left-color: var(--accent2);
+    }
+
+    .callout p { margin: 0; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 100px;
+    }
+
+    .badge-ok { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+    .badge-warn { background: rgba(240,165,0,0.12); color: var(--accent2); border: 1px solid rgba(240,165,0,0.25); }
+    .badge-err { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+
+    /* ── LAYOUT ASCII ── */
+    .layout-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #a0e080;
+      white-space: pre;
+      overflow-x: auto;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+
+    /* ── FINANCIAL ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-card .stat-val {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-card .stat-lbl {
+      font-size: 11px;
+      color: var(--muted);
       margin-top: 4px;
     }
 
-    .tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+      margin: 16px 0;
     }
 
-    .tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 100px;
-      background: rgba(124, 106, 247, 0.12);
-      color: var(--accent);
-      border: 1px solid rgba(124, 106, 247, 0.2);
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border);
     }
 
-    .tag.green {
-      background: rgba(52, 211, 153, 0.1);
-      color: #34d399;
-      border-color: rgba(52, 211, 153, 0.2);
+    .tl-item {
+      position: relative;
+      margin-bottom: 20px;
     }
 
-    .tag.pink {
-      background: rgba(247, 106, 200, 0.1);
-      color: var(--accent2);
-      border-color: rgba(247, 106, 200, 0.2);
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -21px; top: 6px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
     }
 
-    .arrow {
-      color: var(--muted);
-      font-size: 18px;
-      transition: transform 0.2s, color 0.2s;
+    .tl-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
     }
 
-    .card:hover .arrow {
-      transform: translate(3px, -3px);
-      color: var(--accent);
+    .tl-desc { font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+    /* ── CHECKLIST FORM ── */
+    .check-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 80px 1fr;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
     }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px;
+    .check-row:first-child { font-weight: 700; color: var(--accent2); font-size: 11px; text-transform: uppercase; }
+
+    .check-center { text-align: center; }
+
+    /* ── IMAGES ── */
+    .img-full {
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 16px 0;
+      display: block;
+    }
+
+    .img-center {
+      display: block;
+      max-width: 420px;
+      margin: 16px auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .img-logo {
+      display: block;
+      max-width: 260px;
+      margin: 0 auto 24px;
+      filter: drop-shadow(0 4px 24px rgba(232,90,26,0.3));
+    }
+
+    .img-caption {
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
+      margin-top: -10px;
+      margin-bottom: 16px;
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
+    .img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
     }
 
-    footer a:hover { text-decoration: underline; }
+    .img-grid img {
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 480px) {
-      .hero { padding: 48px 16px 32px; }
-      .projects-section { padding: 32px 16px 60px; }
-      .projects-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 20px; }
+      .img-grid { grid-template-columns: 1fr; }
     }
+
+    /* ══════════════════════════════════════
+       ESTILOS DE IMPRESIÓN / EXPORT PDF
+       ══════════════════════════════════════ */
+    @media print {
+      /* ── Variables de color para impresión ── */
+      :root {
+        --bg: #ffffff;
+        --surface: #f7f7f7;
+        --surface2: #eeeeee;
+        --border: #cccccc;
+        --accent: #c0430f;
+        --accent2: #b07800;
+        --text: #111111;
+        --muted: #555555;
+      }
+
+      /* ── Configuración de página ── */
+      @page {
+        size: A4;
+        margin: 20mm 18mm 20mm 18mm;
+      }
+
+      @page :first {
+        margin-top: 10mm;
+      }
+
+      /* ── Reset general ── */
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      html, body {
+        background: #fff !important;
+        color: #111 !important;
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      /* ── Ocultar sidebar ── */
+      .sidebar { display: none !important; }
+
+      /* ── Main ocupa todo el ancho ── */
+      .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      /* ── Portada — página propia ── */
+      .cover {
+        background: #fff !important;
+        border: 2px solid #c0430f !important;
+        border-radius: 8px !important;
+        padding: 32px !important;
+        page-break-after: always;
+        break-after: page;
+        text-align: center;
+      }
+
+      .cover::before { display: none !important; }
+
+      .cover h1 {
+        color: #c0430f !important;
+        font-size: 24pt !important;
+      }
+
+      .cover h1 span { color: #111 !important; }
+
+      .cover-badge {
+        background: #fde8de !important;
+        border: 1px solid #c0430f !important;
+        color: #c0430f !important;
+        border-radius: 4px !important;
+      }
+
+      .cover-sub { color: #555 !important; }
+
+      .cover-meta {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        margin-top: 24px !important;
+      }
+
+      .meta-item {
+        background: #f7f7f7 !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        text-align: left !important;
+      }
+
+      .meta-label { color: #555 !important; }
+      .meta-value { color: #111 !important; }
+
+      /* ── Secciones ── */
+      .section {
+        margin-bottom: 24pt !important;
+        page-break-inside: avoid;
+      }
+
+      .section-header {
+        border-bottom: 2px solid #c0430f !important;
+        margin-bottom: 14pt !important;
+        padding-bottom: 8pt !important;
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      .section-number {
+        background: #c0430f !important;
+        color: #fff !important;
+        border-radius: 4px !important;
+        print-color-adjust: exact !important;
+      }
+
+      .section-title {
+        color: #111 !important;
+        font-size: 14pt !important;
+      }
+
+      /* ── Texto ── */
+      p { color: #222 !important; font-size: 10pt !important; }
+      li { color: #222 !important; font-size: 10pt !important; }
+      h3 { color: #b07800 !important; font-size: 11pt !important; page-break-after: avoid; }
+      h4 { color: #111 !important; font-size: 10pt !important; page-break-after: avoid; }
+      strong { color: #111 !important; }
+
+      /* ── Tablas ── */
+      .table-wrap {
+        page-break-inside: avoid;
+        margin: 8pt 0 !important;
+      }
+
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 8.5pt !important;
+      }
+
+      th {
+        background: #c0430f !important;
+        color: #fff !important;
+        padding: 6pt 8pt !important;
+        font-size: 8pt !important;
+        print-color-adjust: exact !important;
+      }
+
+      td {
+        padding: 5pt 8pt !important;
+        border: 1px solid #ccc !important;
+        color: #111 !important;
+        font-size: 8.5pt !important;
+      }
+
+      tr:nth-child(even) td {
+        background: #f9f9f9 !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* ── Callouts ── */
+      .callout {
+        background: #fff8f5 !important;
+        border: 1px solid #c0430f !important;
+        border-left: 4px solid #c0430f !important;
+        border-radius: 4px !important;
+        padding: 10pt 12pt !important;
+        page-break-inside: avoid;
+        print-color-adjust: exact !important;
+      }
+
+      .callout.warning {
+        background: #fffbf0 !important;
+        border-color: #b07800 !important;
+        border-left-color: #b07800 !important;
+      }
+
+      .callout p { color: #222 !important; margin: 0 !important; }
+
+      /* ── Cards info ── */
+      .card-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8pt !important;
+      }
+
+      .info-card {
+        background: #f7f7f7 !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        page-break-inside: avoid;
+        print-color-adjust: exact !important;
+      }
+
+      .info-card .label { color: #555 !important; }
+      .info-card .value { color: #111 !important; }
+
+      /* ── Stats ── */
+      .stat-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8pt !important;
+        page-break-inside: avoid;
+      }
+
+      .stat-card {
+        background: #f7f7f7 !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        page-break-inside: avoid;
+        print-color-adjust: exact !important;
+      }
+
+      .stat-val { color: #c0430f !important; font-size: 12pt !important; print-color-adjust: exact !important; }
+      .stat-lbl { color: #555 !important; font-size: 8pt !important; }
+
+      /* ── Badges ── */
+      .badge { font-size: 8pt !important; border-radius: 3px !important; print-color-adjust: exact !important; }
+      .badge-ok { background: #e6f7f0 !important; color: #1a7a50 !important; border: 1px solid #1a7a50 !important; }
+      .badge-warn { background: #fffbf0 !important; color: #b07800 !important; border: 1px solid #b07800 !important; }
+      .badge-err { background: #fff0f0 !important; color: #cc0000 !important; border: 1px solid #cc0000 !important; }
+
+      /* ── Timeline ── */
+      .timeline { padding-left: 16pt !important; }
+
+      .timeline::before {
+        background: #ccc !important;
+        print-color-adjust: exact !important;
+      }
+
+      .tl-item::before {
+        background: #c0430f !important;
+        border-color: #fff !important;
+        print-color-adjust: exact !important;
+      }
+
+      .tl-title { color: #111 !important; }
+      .tl-desc { color: #555 !important; }
+
+      /* ── Imágenes ── */
+      .img-logo {
+        max-width: 180px !important;
+        margin: 0 auto 16pt !important;
+      }
+
+      .img-center {
+        max-width: 300px !important;
+        margin: 10pt auto !important;
+        border: 1px solid #ccc !important;
+      }
+
+      .img-full {
+        width: 100% !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        margin: 8pt 0 !important;
+        page-break-inside: avoid;
+      }
+
+      .img-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8pt !important;
+        page-break-inside: avoid;
+      }
+
+      .img-caption {
+        color: #555 !important;
+        font-size: 8pt !important;
+        font-style: italic;
+        margin-bottom: 8pt !important;
+      }
+
+      /* ── Saltos de página entre secciones grandes ── */
+      #cotizaciones,
+      #seguridad-industrial,
+      #financiero,
+      #cierre {
+        page-break-before: always;
+        break-before: page;
+      }
+
+      /* ── Ocultar cosas innecesarias en PDF ── */
+      .nav-link, .nav-group, .nav-group-title { display: none !important; }
+    }
+  </style>
+
+  <!-- Botón de exportar PDF (solo visible en pantalla) -->
+  <style>
+    .print-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #e85a1a;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(232,90,26,0.4);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .print-btn:hover { background: #c0430f; transform: translateY(-2px); }
+    @media print { .print-btn { display: none !important; } }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
-  <section class="hero">
-    <span class="hero-tag">Disponible para proyectos</span>
-    <h1>Hola, soy <span>Bryan Palma</span></h1>
-    <p>Desarrollador web con foco en interfaces modernas y aplicaciones funcionales. Aquí encontrarás una selección de mis proyectos.</p>
-    <div class="hero-links">
-      <a class="btn btn-primary" href="https://github.com/bryanpalma95" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-        GitHub
-      </a>
-      <a class="btn btn-ghost" href="mailto:brian.palma92@gmail.com">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        Contacto
-      </a>
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h2>🔧 Xtreme 4x4</h2>
+    <p>Informe APT Final — DuocUC</p>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Portada</div>
+    <a class="nav-link" href="#portada">Identificación del proyecto</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">1. Problema</div>
+    <a class="nav-link" href="#problema">Definición y contexto</a>
+    <a class="nav-link" href="#poblacion">Población impactada</a>
+    <a class="nav-link" href="#competencias">Competencias aplicadas</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">2. Objetivos</div>
+    <a class="nav-link" href="#objetivos">General y específicos</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">3. Metodología</div>
+    <a class="nav-link" href="#metodologia">Etapas metodológicas</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">4. Desarrollo</div>
+    <a class="nav-link" href="#etapas">Etapas significativas</a>
+    <a class="nav-link" href="#dificultades">Dificultades y facilitadores</a>
+    <a class="nav-link" href="#ajustes">Plan de ajustes</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">5. Evidencias</div>
+    <a class="nav-link" href="#checklist">Checklist de recepción</a>
+    <a class="nav-link" href="#torques">Protocolo de torques</a>
+    <a class="nav-link" href="#layout">Layout del taller</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">5b. Cotizaciones</div>
+    <a class="nav-link" href="#cotizaciones">NEUMACHILE · Liqui Moly</a>
+    <a class="nav-link" href="#cotizaciones">Sodimac · Olate · Gidi</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">6. Técnico mecánico</div>
+    <a class="nav-link" href="#seguridad-industrial">Seguridad industrial</a>
+    <a class="nav-link" href="#tolerancias">Tolerancias cinemáticas</a>
+    <a class="nav-link" href="#electronica">Reprogramación electrónica</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">7. Resultados</div>
+    <a class="nav-link" href="#financiero">Análisis financiero</a>
+    <a class="nav-link" href="#mercado">Estudio de mercado</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">8. Cierre</div>
+    <a class="nav-link" href="#cierre">Reflexión y proyecciones</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PORTADA -->
+  <div class="cover" id="portada">
+    <img src="img/logo.png" alt="Logo Xtreme 4x4" class="img-logo" />
+    <span class="cover-badge">Portafolio de Título PTI4186 — Fase 2</span>
+    <h1>Xtreme 4x4<br><span>Centro de Reparaciones y<br>Modificaciones Off-Road</span></h1>
+    <p class="cover-sub">Informe Final — Carrera Técnico en Mecánica Automotriz y Autotrónica</p>
+    <div class="cover-meta">
+      <div class="meta-item">
+        <div class="meta-label">Institución</div>
+        <div class="meta-value">DuocUC Campus Villarrica</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Escuela</div>
+        <div class="meta-value">Ingeniería y Recursos Naturales</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Integrantes</div>
+        <div class="meta-value">Angell Palma · Nicolás Toro · Benjamín Navarrete · David Aguayo</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Zona de operación</div>
+        <div class="meta-value">Villarrica · Pucón · Caburgua</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1 — PROBLEMA -->
+  <section class="section" id="problema">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2 class="section-title">Problema o situación abordada</h2>
+    </div>
+
+    <p>El presente proyecto se centra en la <strong>modificación y reparación especializada de vehículos y sistemas 4x4</strong>, abordando de manera integral las exigencias mecánicas del uso off-road. La iniciativa surge de una necesidad crítica en la zona lacustre de la Región de la Araucanía, donde turistas y aficionados enfrentan terrenos complejos de barro, nieve y ceniza volcánica.</p>
+
+    <p>A diferencia de la mecánica convencional, esta propuesta plantea que la intervención no debe ser solo <em>reactiva</em> ante fallas, sino <em>proactiva</em>, elevando los estándares de seguridad y confiabilidad mediante el refuerzo de componentes para uso extremo.</p>
+
+    <div class="callout">
+      <p><strong>Nombre comercial:</strong> Xtreme 4x4 — el término "Xtreme" significa superar los límites de fábrica para que un vehículo soporte terrenos, esfuerzos y condiciones ambientales que un modelo estándar no podría resistir.</p>
+    </div>
+
+    <img src="img/logo.png" alt="Logo institucional Xtreme 4x4" class="img-center" />
+    <p class="img-caption">Imagen institucional — Xtreme 4x4: Centro de Reparaciones y Modificaciones Off-Road</p>
+
+    <h3>Contexto geográfico</h3>
+    <div class="card-grid">
+      <div class="info-card">
+        <div class="label">Zona</div>
+        <div class="value">Villarrica, Pucón y Caburgua — Región de la Araucanía</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Tipo de terreno</div>
+        <div class="value">Barro denso y arcilloso, nieve estacional, roca volcánica</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Actividad principal</div>
+        <div class="value">Off-road ("jeepeo") y turismo de aventura extremo</div>
+      </div>
+    </div>
+
+    <h3 id="poblacion">Población impactada</h3>
+    <ul>
+      <li><strong>Turistas:</strong> Visitantes que acuden a la zona atraídos por el turismo de aventura y que carecen de vehículos con preparación adecuada para el terreno.</li>
+      <li><strong>Aficionados al Off-Road:</strong> Usuarios locales y regionales que recorren rutas de alta complejidad como Caburgua-Colico y requieren soluciones mecánicas avanzadas.</li>
+    </ul>
+
+    <h3 id="competencias">Competencias y áreas de desempeño técnico</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Competencia</th><th>Aplicación en el proyecto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Sistemas de Transmisión</strong></td><td>Optimización de diferenciales y tracción para gestionar altos niveles de torque sin daños estructurales</td></tr>
+          <tr><td><strong>Dirección, Suspensión y Frenos</strong></td><td>Base técnica para el lift kit y modificación de geometría, conservando estabilidad dinámica y frenado eficaz</td></tr>
+          <tr><td><strong>Mantenimiento Automotriz</strong></td><td>Diseño de planes de mantenimiento rigurosos que compensen el esfuerzo mecánico adicional del uso extremo</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <!-- SECCIÓN 2 — OBJETIVOS -->
+  <section class="section" id="objetivos">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2 class="section-title">Objetivos del Proyecto</h2>
+    </div>
 
-  <!-- PROJECTS -->
-  <section class="projects-section">
-    <p class="section-label">Proyectos</p>
-    <div class="projects-grid">
+    <div class="callout">
+      <p><strong>Objetivo General:</strong> Optimizar y reparar sistemas mecánicos en vehículos 4x4 para garantizar un desempeño superior, seguro y confiable en terrenos de alta exigencia (barro, nieve y ceniza volcánica) en la zona lacustre de la Región de la Araucanía.</p>
+    </div>
 
-      <!-- Skylabs -->
-      <a class="card" href="https://bryanpalma95.github.io/Proyectos.github.io" target="_blank" rel="noopener">
-        <div class="card-icon">🚀</div>
-        <div class="card-title">Skylabs</div>
-        <div class="card-desc">Sitio web corporativo para empresa de desarrollo y mantención de software. Diseño one-page con Bootstrap.</div>
-        <div class="card-footer">
-          <div class="tags">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">Bootstrap</span>
-          </div>
-          <span class="arrow">↗</span>
-        </div>
-      </a>
+    <h3>Objetivos Específicos</h3>
+    <ul>
+      <li>Evaluar y diagnosticar las fallas comunes y los límites técnicos de los componentes de fábrica bajo condiciones de uso extremo.</li>
+      <li>Implementar mejoras técnicas en los sistemas de tracción, suspensión y refrigeración mediante el uso de componentes de alto rendimiento.</li>
+      <li>Validar los ajustes realizados bajo estándares de fabricantes para asegurar la estabilidad y seguridad del vehículo en rutas críticas como Caburgua-Colico.</li>
+    </ul>
+  </section>
 
-      <!-- Tu Guía de Turismo -->
-      <a class="card" href="https://bryanpalma95.github.io/Tuguiadeturismo" target="_blank" rel="noopener">
-        <div class="card-icon">🗺️</div>
-        <div class="card-title">Tu Guía de Turismo</div>
-        <div class="card-desc">App web para descubrir y gestionar servicios turísticos en Chile. Incluye 73 servicios reales con búsqueda en tiempo real.</div>
-        <div class="card-footer">
-          <div class="tags">
-            <span class="tag green">JavaScript</span>
-            <span class="tag">CSS3</span>
-            <span class="tag">LocalStorage</span>
-          </div>
-          <span class="arrow">↗</span>
-        </div>
-      </a>
+  <!-- SECCIÓN 3 — METODOLOGÍA -->
+  <section class="section" id="metodologia">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2 class="section-title">Metodología</h2>
+    </div>
 
-      <!-- Chavito -->
-      <a class="card" href="https://bryanpalma95.github.io/chavito" target="_blank" rel="noopener">
-        <div class="card-icon">🍔</div>
-        <div class="card-title">La Pica del Chavito</div>
-        <div class="card-desc">Sitio web para local de comida. Diseño simple y directo con HTML puro.</div>
-        <div class="card-footer">
-          <div class="tags">
-            <span class="tag pink">HTML</span>
-          </div>
-          <span class="arrow">↗</span>
-        </div>
-      </a>
+    <p>La metodología combina el rigor de la <strong>ingeniería mecánica</strong> con la <strong>planificación estratégica de negocios</strong>, estructurándose en etapas secuenciales:</p>
 
-      <!-- Ver todos -->
-      <a class="card" href="https://github.com/bryanpalma95" target="_blank" rel="noopener">
-        <div class="card-icon">📁</div>
-        <div class="card-title">Ver todos los proyectos</div>
-        <div class="card-desc">Explora el resto de repositorios y proyectos en GitHub.</div>
-        <div class="card-footer">
-          <div class="tags">
-            <span class="tag">GitHub</span>
-          </div>
-          <span class="arrow">↗</span>
-        </div>
-      </a>
-
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">1. Investigación de Mercado</div>
+        <p class="tl-desc">Estudios en talleres competidores y encuestas a aficionados al jeepeo y turistas en Villarrica, Pucón y Caburgua.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">2. Levantamiento Técnico y Normativo</div>
+        <p class="tl-desc">Búsqueda de especificaciones en manuales de taller certificados para asegurar cumplimiento de estándares de seguridad.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">3. Análisis de Factibilidad Económica</div>
+        <p class="tl-desc">Cotizaciones detalladas con proveedores para establecer rangos de precios competitivos.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">4. Protocolo de Ejecución y Validación Técnica</div>
+        <p class="tl-desc">Definición de procedimientos paso a paso para el refuerzo de chasis, instalación de bloqueos y mantenimiento preventivo especializado.</p>
+      </div>
     </div>
   </section>
 
-  <footer>
-    <p>Hecho por <a href="https://github.com/bryanpalma95">Bryan Palma</a> · <a href="mailto:brian.palma92@gmail.com">brian.palma92@gmail.com</a></p>
-  </footer>
+  <!-- SECCIÓN 4 — DESARROLLO -->
+  <section class="section" id="etapas">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2 class="section-title">Desarrollo del Proyecto</h2>
+    </div>
+
+    <h3>4.1 Etapas más significativas</h3>
+    <ol>
+      <li><strong>Investigación de mercado y encuesta:</strong> Aplicación de 78-79 encuestas en la zona lacustre para validar la demanda del nicho 4x4.</li>
+      <li><strong>Levantamiento técnico y normativo:</strong> Revisión de manuales de taller certificados para definir los protocolos de modificación.</li>
+      <li><strong>Análisis estratégico:</strong> Desarrollo de PESTEL, FODA, CAME, Porter, Cadena de Valor y Lean Canvas.</li>
+      <li><strong>Cotización y factibilidad económica:</strong> Cotizaciones formales con NEUMACHILE, Liqui Moly, Sodimac y Olate Ferretería.</li>
+      <li><strong>Diseño operativo:</strong> Layout del taller, protocolos técnicos por fases y protocolo de atención al cliente.</li>
+    </ol>
+
+    <h3 id="dificultades">4.2 Dificultades y facilitadores</h3>
+
+    <h4>✅ Facilitadores</h4>
+    <ul>
+      <li>La ubicación en la zona lacustre permitió acceso directo a vehículos reales operando en terrenos extremos.</li>
+      <li>Acceso constante a internet para consultar manuales técnicos certificados de fabricantes.</li>
+      <li>División clara de roles: investigación de mercado (Angell Palma), levantamiento normativo (Nicolás Toro), gestión financiera (David Aguayo) y protocolos de taller (Benjamín Navarrete).</li>
+      <li>Contacto con centros de práctica y talleres mecánicos de la zona como canal de validación técnica.</li>
+    </ul>
+
+    <h4>⚠️ Dificultades</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dificultad</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Repuestos sin distribución local</strong></td><td>Componentes Heavy Duty concentrados en Santiago o el extranjero. Precios y tiempos de entrega difíciles de confirmar.</td></tr>
+          <tr><td><strong>Tiempo operativo limitado</strong></td><td>90 horas semestrales insuficientes para validaciones técnicas complejas como reprogramación de ECU.</td></tr>
+          <tr><td><strong>Sin infraestructura física propia</strong></td><td>Fase APT requirió validar mediante simulación digital y consulta de manuales sin acceso a taller físico.</td></tr>
+          <tr><td><strong>Fluctuaciones del tipo de cambio</strong></td><td>Dependencia de componentes importados expuso el análisis financiero a variaciones del dólar.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="ajustes">4.3 Plan de acción y ajustes realizados</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dificultad</th><th>Ajuste aplicado</th></tr></thead>
+        <tbody>
+          <tr><td>Repuestos sin distribución local</td><td>Contacto directo con distribuidores mayoristas en Santiago. Cotizaciones formales con validez de 15 días para fijar precios base.</td></tr>
+          <tr><td>Tiempo limitado</td><td>Carta Gantt con entregas semanales por integrante, maximizando horas fuera de clases.</td></tr>
+          <tr><td>Sin taller físico</td><td>Software de diseño para el Layout y manuales de taller digitales certificados para validar cada procedimiento.</td></tr>
+          <tr><td>Variación del dólar</td><td>Margen de contingencia del 10% incorporado en el análisis financiero.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5 — EVIDENCIAS -->
+  <section class="section" id="checklist">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2 class="section-title">Evidencias Operativas</h2>
+    </div>
+
+    <h3>5.1 Checklist de Recepción de Vehículo 4x4</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Ítem de Inspección</th>
+            <th>Conforme</th>
+            <th>No Conforme</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Estado general de pintura y carrocería</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>2</td><td>Abolladuras o daños estructurales visibles</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>3</td><td>Nivel de aceite de motor</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>4</td><td>Nivel de líquido de frenos</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>5</td><td>Nivel de aceite de caja de transferencia</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>6</td><td>Nivel de aceite diferencial delantero/trasero</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>7</td><td>Fugas visibles en cárter, coronas o caja de cambios</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>8</td><td>Holgura en rótulas del tren delantero</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>9</td><td>Holgura en terminales de dirección</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>10</td><td>Estado de bujes de bandejas superior/inferior</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>11</td><td>Estado de amortiguadores (fugas/golpes)</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>12</td><td>Estado de neumáticos (desgaste/presión)</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>13</td><td>Estado de frenos (disco/pastillas/tambor)</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>14</td><td>Estado de cardanes y homocinéticas</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>15</td><td>Funcionamiento luces delanteras/traseras</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>16</td><td>Funcionamiento 4x4 High / 4x4 Low</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>17</td><td>Códigos de falla activos (escaneo OBD)</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+          <tr><td>18</td><td>Kilometraje al ingreso</td><td class="td-check">☐</td><td class="td-check">☐</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="torques">5.2 Protocolo de Torques y Geometría</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Componente</th><th>Torque espec. (Nm)</th><th>Torque aplicado (Nm)</th><th>Técnico</th></tr></thead>
+        <tbody>
+          <tr><td>Perno superior amortiguador delantero</td><td></td><td></td><td></td></tr>
+          <tr><td>Perno inferior amortiguador delantero</td><td></td><td></td><td></td></tr>
+          <tr><td>Perno superior amortiguador trasero</td><td></td><td></td><td></td></tr>
+          <tr><td>Perno inferior amortiguador trasero</td><td></td><td></td><td></td></tr>
+          <tr><td>Rótula inferior bandeja</td><td></td><td></td><td></td></tr>
+          <tr><td>Rótula superior bandeja</td><td></td><td></td><td></td></tr>
+          <tr><td>Pernos bandeja al chasis</td><td></td><td></td><td></td></tr>
+          <tr><td>Terminal de dirección</td><td></td><td></td><td></td></tr>
+          <tr><td>Tuerca central homocinética</td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Registro de Geometría</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ángulo</th><th>Especificación fábrica</th><th>Antes</th><th>Después</th><th>¿Tolerable?</th></tr></thead>
+        <tbody>
+          <tr><td>Caster derecho</td><td></td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Caster izquierdo</td><td></td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Camber derecho</td><td></td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Camber izquierdo</td><td></td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Toe total</td><td></td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Ángulo cardán delantero</td><td>3° – 5° máx.</td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+          <tr><td>Ángulo cardán trasero</td><td>3° – 5° máx.</td><td></td><td></td><td class="td-check">☐ Sí &nbsp;☐ No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="layout">5.3 Layout del Taller con Zonas de Seguridad</h3>
+    <img src="img/layout.png" alt="Distribución de planta Galpón 110m²" class="img-full" />
+    <p class="img-caption">Galpón 110 m² — Distribución de zonas de trabajo, almacenamiento y servicios</p>    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Zona</th><th>EPP Obligatorio</th><th>Riesgo Principal</th></tr></thead>
+        <tbody>
+          <tr><td>Box de trabajo activo</td><td>Zapatos de seguridad, guantes, gafas, mascarilla</td><td>Caída de vehículo, proyección de chispas</td></tr>
+          <tr><td>Almacén de repuestos</td><td>Zapatos de seguridad, guantes</td><td>Caída de objetos pesados</td></tr>
+          <tr><td>Zona de alineación</td><td>Zapatos de seguridad, chaleco reflectante</td><td>Atropello, aplastamiento</td></tr>
+          <tr><td>Acceso camiones</td><td>Chaleco reflectante</td><td>Atropello</td></tr>
+          <tr><td>Recepción / Sala espera</td><td>Ninguno</td><td>Bajo riesgo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5b — COTIZACIONES -->
+  <section class="section" id="cotizaciones">
+    <div class="section-header">
+      <div class="section-number">5b</div>
+      <h2 class="section-title">Cotizaciones Formales</h2>
+    </div>
+
+    <p>A continuación se presentan las cotizaciones reales obtenidas de proveedores para sustentar el análisis de factibilidad económica del proyecto.</p>
+
+    <h3>Maquinaria y Equipamiento — NEUMACHILE S.A.</h3>
+    <img src="img/cot-neumachile.png" alt="Cotización formal NEUMACHILE S.A." class="img-full" />
+    <p class="img-caption">Cotización N° NC-2026-0518 — Total: $19.976.093 CLP (incluye IVA)</p>
+
+    <h3>Químicos, Aditivos y Lubricantes — Liqui Moly Chile SpA</h3>
+    <img src="img/cot-liquimoly.png" alt="Cotización Liqui Moly Chile SpA" class="img-full" />
+    <p class="img-caption">Cotización SBO N° 9118 — Total: $322.171 CLP (incluye IVA)</p>
+
+    <h3>Herramientas Especializadas — Sodimac S.A. (Lote 1)</h3>
+    <div class="img-grid">
+      <img src="img/cot-sodimac1.png" alt="Cotización Sodimac herramientas parte 1" />
+      <img src="img/cot-sodimac2.png" alt="Cotización Sodimac herramientas parte 2" />
+    </div>
+    <p class="img-caption">Cotización COT-2026-0518 — Total con CMR: $589.590 CLP</p>
+
+    <h3>Materiales y Ferretería — Olate Ferretería SpA</h3>
+    <img src="img/cot-olate.png" alt="Cotización Olate Ferretería SpA" class="img-full" />
+    <p class="img-caption">Cotización N° COT-2026-00412 — Total: $288.430 CLP (incluye IVA)</p>
+
+    <h3>Mobiliario e Infraestructura — Sodimac S.A. (Lote 2)</h3>
+    <img src="img/cot-sodimac3.png" alt="Cotización Sodimac muebles y mobiliario" class="img-full" />
+    <p class="img-caption">Cotización COT-2026-0518 — Total con CMR: $176.970 CLP</p>
+
+    <h3>Infraestructura / Arriendo — Patricio Gidi Propiedades</h3>
+    <img src="img/cot-gidi.png" alt="Cotización arriendo galpón Patricio Gidi Propiedades" class="img-full" />
+    <p class="img-caption">Galpón 110 m² — Villarrica, Araucanía — Arriendo mensual: $800.000 CLP</p>
+  </section>
+
+  <!-- SECCIÓN 6 — TÉCNICO MECÁNICO -->
+  <section class="section" id="seguridad-industrial">    <div class="section-header">
+      <div class="section-number">6</div>
+      <h2 class="section-title">Rigor Técnico Mecánico</h2>
+    </div>
+
+    <h3>6.1 Seguridad Industrial — Instalación de Suspensión Modificada</h3>
+
+    <h4>Antes de la intervención</h4>
+    <ul>
+      <li>Verificar el estado del chasis mediante inspección visual y prueba de torque en puntos de anclaje.</li>
+      <li>Elevar el vehículo con el elevador tijera certificado (Sunshine SXJS4021), asegurando el eje con soportes independientes.</li>
+      <li>Bloquear ruedas con cuñas y desconectar la batería antes de intervenir el tren delantero.</li>
+      <li>EPP obligatorio: zapatos de seguridad, guantes de cuero, gafas de protección y ropa ignífuga para trabajos con soldadura.</li>
+    </ul>
+
+    <h4>Durante la intervención</h4>
+    <div class="callout warning">
+      <p>⚠️ <strong>Crítico:</strong> Nunca comprimir un resorte de suspensión sin prensa de resorte certificada con collar de seguridad. Un resorte liberado sin control puede generar una fuerza de hasta 500 kg, causando lesiones graves o muerte.</p>
+    </div>
+    <ul>
+      <li>Los pernos de anclaje deben apretarse con <strong>llave de torque calibrada</strong>, nunca con pistola de impacto en el apriete final. Valores típicos: 80 a 130 Nm según modelo y fabricante.</li>
+      <li>El torque definitivo de los bujes del chasis se aplica con el vehículo <strong>apoyado sobre sus ruedas en posición de carga normal</strong> para evitar desgaste prematuro por torsión estática.</li>
+    </ul>
+
+    <h4>Posterior a la intervención</h4>
+    <ul>
+      <li>Todo vehículo intervenido pasa obligatoriamente por <strong>alineación de 3 ángulos</strong> (Caster, Camber y Toe) antes de la entrega.</li>
+      <li>Prueba de ruta estática y dinámica para verificar ausencia de vibraciones en cardán y estanqueidad total del sistema.</li>
+    </ul>
+
+    <h3 id="tolerancias">6.2 Tolerancias Cinemáticas de la Transmisión</h3>
+
+    <h4>Ángulo de trabajo del cardán</h4>
+    <p>El ángulo máximo recomendado por fabricantes para un cardán estándar en uso off-road es de <strong>3° a 5° en condición estática.</strong> Si el lift supera las 3 pulgadas sin corrección, se debe instalar un kit de corrección de ángulo diferencial (differential drop kit) o cardanes de longitud extendida.</p>
+    <p>Para verificarlo: medir el ángulo del eje de transmisión con un <strong>goniómetro digital</strong> antes y después del levante.</p>
+
+    <h4>Homocinéticas (CVJ) en tracción delantera</h4>
+    <p>Las homocinéticas trabajan correctamente hasta un ángulo máximo de <strong>40° a 45°</strong> según fabricante. Al aumentar el levante sin modificar la longitud de los brazos de suspensión, este ángulo se acerca al límite en compresión máxima.</p>
+    <p><strong>Solución aplicada:</strong> instalación de bandejas superiores de desplazamiento (offset upper control arms) que corrigen la geometría y mantienen el ángulo dentro del rango seguro.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Componente</th><th>Tolerancia máxima</th><th>Consecuencia si se supera</th></tr></thead>
+        <tbody>
+          <tr><td>Cardán estándar (estático)</td><td>3° – 5°</td><td>Vibraciones, desgaste acelerado de crucetas</td></tr>
+          <tr><td>Homocinética CVJ (compresión)</td><td>40° – 45°</td><td>Ruido tipo "clac", rotura en terreno</td></tr>
+          <tr><td>Eje de transmisión (dinámico)</td><td>Según fabricante</td><td>Vibración en velocidad, desequilibrio</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="electronica">6.3 Reprogramación Electrónica y Calibración de Sensores</h3>
+    <p>Los vehículos 4x4 modernos trabajan con parámetros calibrados para la altura y geometría de fábrica. Al modificar la altura, los siguientes sistemas requieren recalibración:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sistema</th><th>¿Calibración requerida?</th><th>Procedimiento</th><th>Consecuencia si se omite</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Sensor Ángulo Dirección (SAS)</strong></td>
+            <td><span class="badge badge-err">Obligatorio</span></td>
+            <td>Escáner → módulo ABS/ESP → rutina "Calibración SAS" con ruedas en posición recta</td>
+            <td>Frenadas de emergencia falsas en terreno off-road</td>
+          </tr>
+          <tr>
+            <td><strong>TCS / ABS (diámetro de neumático)</strong></td>
+            <td><span class="badge badge-err">Obligatorio</span></td>
+            <td>Corrección de circunferencia de rueda (tire size calibration) en ECU</td>
+            <td>Control de tracción erróneo, ABS mal calibrado</td>
+          </tr>
+          <tr>
+            <td><strong>Sensor de nivel de suspensión</strong></td>
+            <td><span class="badge badge-warn">Según modelo</span></td>
+            <td>Reprogramación en vehículos con suspensión electrónica (ej. Land Cruiser con KDSS)</td>
+            <td>Sistema intenta corregir continuamente la nueva altura como si fuera una falla</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 7 — RESULTADOS -->
+  <section class="section" id="financiero">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <h2 class="section-title">Resultados e Impacto</h2>
+    </div>
+
+    <h3>7.1 Análisis Financiero</h3>
+    <div class="stat-grid">      <div class="stat-card">
+        <div class="stat-val">$22.166.254</div>
+        <div class="stat-lbl">Inversión inicial (CLP)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">$4.640.867</div>
+        <div class="stat-lbl">Costos fijos mensuales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">56 autos</div>
+        <div class="stat-lbl">Punto de equilibrio mensual</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">Mes 7</div>
+        <div class="stat-lbl">Inicio de rentabilidad</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">$1.359.133</div>
+        <div class="stat-lbl">Excedente mensual (etapa consolidación)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">$25.000.000</div>
+        <div class="stat-lbl">Crédito bancario (24 meses, 1,45% mensual)</div>
+      </div>
+    </div>
+
+    <h4>Tabla de Amortización del Crédito (24 meses)</h4>
+    <img src="img/tabla-amortizacion.png" alt="Tabla de amortización del crédito bancario" class="img-full" />
+    <p class="img-caption">Crédito $25.000.000 — 24 meses — Tasa 1,45% mensual — Cuota fija $1.240.867</p>
+
+    <h4>Proyección del Flujo de Caja</h4>
+    <img src="img/tabla-flujo.png" alt="Tabla flujo de caja proyectado" class="img-full" />
+    <p class="img-caption">Flujo de caja proyectado a 12 meses con tres etapas de maduración</p>
+
+    <h4>Punto de Equilibrio — Mix de Servicios</h4>
+    <img src="img/tabla-equilibrio.png" alt="Tabla punto de equilibrio por servicio" class="img-full" />
+    <p class="img-caption">56 vehículos mensuales = $4.959.000 = 107% de costos fijos cubiertos</p>
+
+    <h4>Resumen de Inversión Inicial</h4>
+    <img src="img/tabla-inversion.png" alt="Resumen inversión inicial por proveedor" class="img-full" />
+    <p class="img-caption">Inversión total: $22.166.254 CLP distribuida en 6 proveedores</p>
+
+    <h3 id="mercado">7.2 Estudio de Mercado</h3>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-val">96,2%</div>
+        <div class="stat-lbl">Aceptación de taller especializado</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">66,7%</div>
+        <div class="stat-lbl">Dispuestos a pagar más por servicio certificado</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">18.400</div>
+        <div class="stat-lbl">Mercado objetivo total (vehículos)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">9%</div>
+        <div class="stat-lbl">Solo priorizan precio bajo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 8 — CIERRE -->
+  <section class="section" id="cierre">
+    <div class="section-header">
+      <div class="section-number">8</div>
+      <h2 class="section-title">Cierre y Proyecciones</h2>
+    </div>
+
+    <h3>Reflexión sobre el aporte del Proyecto APT</h3>
+    <p>Este proyecto nació de una profunda vocación por la <strong>ingeniería aplicada y la personalización técnica</strong>, orientada hacia la mecánica de especialidad con un enfoque particular en la optimización de sistemas de suspensión y tracción para vehículos de alto desempeño.</p>
+
+    <p>A lo largo del desarrollo del Proyecto APT, ese interés inicial se transformó en certeza. Cada etapa — desde el levantamiento técnico hasta el análisis financiero — confirmó que la mecánica de especialidad 4x4 no solo es una pasión, sino un <strong>nicho profesional real y rentable</strong> en la zona lacustre de la Araucanía.</p>
+
+    <div class="callout">
+      <p>Los intereses profesionales planteados al inicio de la asignatura se mantienen y se han profundizado: la especialización en sistemas de tracción, suspensión y diagnóstico avanzado sigue siendo el eje central del perfil profesional que se busca desarrollar.</p>
+    </div>
+
+    <h3>Proyecciones laborales</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">Corto plazo</div>
+        <p class="tl-desc">Insertarse en talleres especializados de la región para ganar experiencia en modificaciones reales de vehículos 4x4, aplicando los protocolos y estándares trabajados en este proyecto.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Mediano plazo</div>
+        <p class="tl-desc">Materializar el taller Xtreme 4x4 en Villarrica, comenzando con los servicios de mayor rotación — alineación, balanceo y suspensión — para construir cartera de clientes.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Largo plazo — Meta 2030</div>
+        <p class="tl-desc">Ser el taller especializado en soluciones 4x4 líder y referente en toda la Región de la Araucanía, reconocidos por calidad técnica, formalidad con garantías escritas y respeto por el medio ambiente.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>La realización de este proyecto dejó en claro que el camino profesional no es el de un técnico generalista, sino el de un <strong>especialista en ingeniería automotriz aplicada al mundo off-road</strong> — un perfil que la zona lacustre necesita y que este equipo está preparado para cubrir.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Resaltar link activo según scroll
+  const links = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section.section, .cover');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+<!-- Botón exportar PDF -->
+<button class="print-btn" onclick="window.print()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+    <rect x="6" y="14" width="12" height="8"/>
+  </svg>
+  Exportar PDF
+</button>
 
 </body>
 </html>
