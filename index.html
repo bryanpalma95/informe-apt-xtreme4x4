@@ -505,7 +505,6 @@
       *, *::before, *::after {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
       }
 
       html, body {
@@ -1425,9 +1424,118 @@
 </button>
 
 <script>
-function exportWord() {
-  // Recopilar todo el contenido del informe
-  const sections = document.querySelector('.main');
+async function imgToBase64(url) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  } catch { return url; }
+}
+
+async function exportWord() {
+  const btn = document.querySelector('.word-btn');
+  const original = btn.innerHTML;
+  btn.innerHTML = '&#9203; Preparando...';
+  btn.disabled = true;
+
+  // Clonar el main sin modificar el DOM real
+  const clone = document.querySelector('.main').cloneNode(true);
+  clone.querySelectorAll('.print-btn,.word-btn,.sidebar').forEach(el => el.remove());
+
+  // Convertir todas las imágenes a base64
+  const images = clone.querySelectorAll('img');
+  await Promise.all(Array.from(images).map(async (img) => {
+    const src = img.getAttribute('src');
+    if (src && !src.startsWith('data:')) {
+      img.setAttribute('src', await imgToBase64(src));
+    }
+  }));
+
+  const style = `<style>
+    body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111;line-height:1.5;margin:2cm}
+    h1{font-size:22pt;color:#c0430f;margin-bottom:6pt}
+    h2{font-size:16pt;color:#c0430f;border-bottom:2px solid #c0430f;padding-bottom:4pt;margin-top:24pt;margin-bottom:10pt;page-break-after:avoid}
+    h3{font-size:12pt;color:#b07800;margin-top:16pt;margin-bottom:6pt;page-break-after:avoid}
+    h4{font-size:11pt;font-weight:bold;margin-top:10pt;margin-bottom:4pt}
+    p{margin-bottom:8pt;font-size:11pt}
+    ul,ol{margin-left:20pt;margin-bottom:8pt}
+    li{margin-bottom:4pt;font-size:11pt}
+    table{width:100%;border-collapse:collapse;margin:10pt 0;font-size:10pt}
+    th{background-color:#c0430f;color:white;padding:6pt 8pt;text-align:left;font-size:9pt}
+    td{padding:5pt 8pt;border:1px solid #ccc;vertical-align:top}
+    tr:nth-child(even) td{background-color:#f9f9f9}
+    .callout{border-left:4px solid #c0430f;background:#fff8f5;padding:8pt 12pt;margin:10pt 0}
+    .callout.warning{border-left-color:#b07800;background:#fffbf0}
+    .cover{text-align:center;border:2px solid #c0430f;padding:32pt;margin-bottom:32pt;page-break-after:always}
+    .cover h1{font-size:26pt}
+    .cover-badge{background:#fde8de;border:1px solid #c0430f;color:#c0430f;padding:3pt 10pt;font-size:10pt;display:inline-block;margin-bottom:12pt}
+    .cover-meta{display:flex;flex-wrap:wrap;gap:10pt;margin-top:20pt;justify-content:center}
+    .meta-item{border:1px solid #ccc;padding:8pt 12pt;min-width:160pt;text-align:left}
+    .meta-label{font-size:8pt;color:#555;text-transform:uppercase;font-weight:bold}
+    .meta-value{font-size:10pt}
+    .section-header{display:flex;align-items:center;gap:10pt;border-bottom:2px solid #c0430f;padding-bottom:6pt;margin-bottom:14pt}
+    .section-number{background:#c0430f;color:white;font-weight:bold;padding:3pt 7pt;font-size:10pt}
+    .section-title{font-size:16pt;font-weight:bold;color:#111}
+    .stat-grid{display:flex;flex-wrap:wrap;gap:10pt;margin:10pt 0}
+    .stat-card{border:1px solid #ccc;padding:10pt;min-width:120pt;text-align:center}
+    .stat-val{font-size:14pt;font-weight:bold;color:#c0430f}
+    .stat-lbl{font-size:8pt;color:#555}
+    .card-grid{display:flex;flex-wrap:wrap;gap:10pt;margin:10pt 0}
+    .info-card{border:1px solid #ccc;padding:8pt 12pt;min-width:140pt}
+    .info-card .label{font-size:8pt;color:#555;text-transform:uppercase;font-weight:bold}
+    .info-card .value{font-size:10pt}
+    .timeline{margin:10pt 0 10pt 16pt;border-left:2px solid #c0430f;padding-left:12pt}
+    .tl-item{margin-bottom:12pt}
+    .tl-title{font-weight:bold;font-size:11pt}
+    .tl-desc{font-size:10pt;color:#555}
+    .badge{padding:2pt 6pt;font-size:9pt;font-weight:bold}
+    .badge-ok{background:#e6f7f0;color:#1a7a50}
+    .badge-warn{background:#fffbf0;color:#b07800}
+    .badge-err{background:#fff0f0;color:#cc0000}
+    img{max-width:100%;height:auto;margin:8pt 0;display:block}
+    .img-logo{max-width:200pt;margin:0 auto 16pt}
+    .img-center{max-width:300pt;margin:10pt auto}
+    .img-full{width:100%;margin:8pt 0}
+    .img-caption{text-align:center;font-size:9pt;color:#555;font-style:italic;margin-bottom:8pt}
+    .img-grid{display:flex;gap:10pt;margin:8pt 0}
+    .img-grid img{width:48%}
+    .table-wrap{margin:10pt 0;overflow:visible}
+    .sidebar,.print-btn,.word-btn,.nav-group,.nav-link{display:none !important}
+  </style>`;
+
+  const html = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="UTF-8">
+  <meta name=ProgId content=Word.Document>
+  <!--[if gte mso 9]><xml>
+    <w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument>
+  </xml><![endif]-->
+  ${style}
+</head>
+<body>${clone.innerHTML}</body>
+</html>`;
+
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'Informe-APT-Xtreme4x4-DuocUC.doc';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  btn.innerHTML = original;
+  btn.disabled  = false;
+}
+</script>
 
   const style = `
     <style>
