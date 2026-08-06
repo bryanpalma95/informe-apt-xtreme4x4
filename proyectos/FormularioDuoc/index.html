@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Cupones Duoc UC</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app">
+    <header class="header">
+        <h1>Cupones Duoc</h1>
+        <div class="header-actions">
+            <span class="queue-badge" id="queueBadge">0</span>
+            <button class="btn-icon" id="btnSettings" title="Configuracion">&#9881;</button>
+        </div>
+    </header>
+
+    <!-- Vista: Configuración inicial -->
+    <section id="settingsView" class="view">
+        <h2>Configuracion</h2>
+        <div class="form-group">
+            <label>API Key de Gemini</label>
+            <input type="password" id="apiKeyInput" placeholder="Pega tu API key aqui">
+            <small>Obtenla gratis en <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a></small>
+        </div>
+        <div class="form-group">
+            <label>URL del formulario Duoc (con token del evento)</label>
+            <input type="url" id="formUrlInput" placeholder="https://duocprdgestionprospecto.azurewebsites.net/web/landing/...">
+        </div>
+        <button class="btn btn-primary" id="btnSaveConfig">Guardar configuracion</button>
+        <div class="config-status" id="configStatus"></div>
+    </section>
+
+    <!-- Vista: Captura -->
+    <main id="captureView" class="view active">
+        <div class="capture-area">
+            <div class="upload-box" id="uploadBox">
+                <div class="upload-icon">&#128247;</div>
+                <p>Toca para sacar foto o subir imagen</p>
+                <input type="file" id="imageInput" accept="image/*" capture="environment">
+            </div>
+            <div class="preview-container" id="previewContainer" style="display:none;">
+                <img id="previewImage" src="" alt="Preview">
+                <button class="btn btn-secondary" id="btnRetake">Otra foto</button>
+            </div>
+        </div>
+        <div class="loading" id="loading" style="display:none;">
+            <div class="spinner"></div>
+            <p>Extrayendo datos con IA...</p>
+        </div>
+        <button class="btn btn-primary btn-large" id="btnProcess" style="display:none;">
+            Extraer datos
+        </button>
+    </main>
+
+    <!-- Vista: Revisar datos -->
+    <section id="reviewView" class="view">
+        <h2>Revisa los datos</h2>
+        <div class="confidence-bar" id="confidenceBar"></div>
+        <form id="dataForm" class="data-form">
+            <div class="form-group">
+                <label>RUT</label>
+                <input type="text" id="f_rut" placeholder="12.345.678-9">
+            </div>
+            <div class="form-group">
+                <label>Nombres</label>
+                <input type="text" id="f_nombres" placeholder="Nombres">
+            </div>
+            <div class="form-group">
+                <label>Apellido Paterno</label>
+                <input type="text" id="f_apellido_paterno" placeholder="Apellido paterno">
+            </div>
+            <div class="form-group">
+                <label>Apellido Materno</label>
+                <input type="text" id="f_apellido_materno" placeholder="Apellido materno">
+            </div>
+            <div class="form-group">
+                <label>Fecha Nacimiento</label>
+                <input type="text" id="f_fecha_nacimiento" placeholder="DD-MM-AAAA">
+            </div>
+            <div class="form-group">
+                <label>Celular (9 digitos)</label>
+                <input type="tel" id="f_celular" placeholder="912345678">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="f_email" placeholder="correo@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label>Comuna Residencia</label>
+                <input type="text" id="f_comuna_residencia" placeholder="Comuna">
+            </div>
+            <div class="form-group">
+                <label>Region</label>
+                <select id="f_region">
+                    <option value="">Seleccionar</option>
+                    <option value="Metropolitana">Metropolitana</option>
+                    <option value="Valparaiso">Valparaiso</option>
+                    <option value="Biobio">Biobio</option>
+                    <option value="Araucania">Araucania</option>
+                    <option value="Los Lagos">Los Lagos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Actividad Actual</label>
+                <select id="f_actividad_actual">
+                    <option value="">Seleccionar</option>
+                    <option value="4 Medio">4to Medio</option>
+                    <option value="Egresado">Egresado Enseñanza Media</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Establecimiento</label>
+                <input type="text" id="f_establecimiento" placeholder="Nombre colegio">
+            </div>
+            <div class="form-group">
+                <label>Jornada</label>
+                <select id="f_jornada">
+                    <option value="">Seleccionar</option>
+                    <option value="Diurna">Diurna</option>
+                    <option value="Vespertina">Vespertina</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sede de Interes</label>
+                <select id="f_sede_interes">
+                    <option value="">Seleccionar</option>
+                    <option value="Plaza Oeste">Plaza Oeste (Cerrillos)</option>
+                    <option value="Plaza Vespucio">Plaza Vespucio</option>
+                    <option value="Puente Alto">Puente Alto</option>
+                    <option value="San Carlos de Apoquindo">San Carlos de Apoquindo</option>
+                    <option value="Maipu">Maipu</option>
+                    <option value="Plaza Norte">Plaza Norte</option>
+                    <option value="Antonio Varas">Antonio Varas</option>
+                    <option value="Alameda">Alameda</option>
+                    <option value="Melipilla">Melipilla</option>
+                    <option value="Valparaiso">Valparaiso</option>
+                    <option value="Vina del Mar">Vina del Mar</option>
+                    <option value="Concepcion">Concepcion</option>
+                    <option value="Villarrica">Villarrica</option>
+                    <option value="Puerto Montt">Puerto Montt</option>
+                    <option value="San Joaquin">San Joaquin</option>
+                    <option value="San Bernardo">San Bernardo</option>
+                </select>
+            </div>
+            <h3>Carreras de Interes</h3>
+            <div class="form-group">
+                <label>1era Preferencia</label>
+                <input type="text" id="f_carrera1" placeholder="Escuela - Carrera">
+            </div>
+            <div class="form-group">
+                <label>2da Preferencia</label>
+                <input type="text" id="f_carrera2" placeholder="Escuela - Carrera">
+            </div>
+            <div class="form-group">
+                <label>3era Preferencia</label>
+                <input type="text" id="f_carrera3" placeholder="Escuela - Carrera">
+            </div>
+        </form>
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="btnDiscard">Descartar</button>
+            <button class="btn btn-primary" id="btnConfirm">Agregar a cola</button>
+        </div>
+    </section>
+
+    <!-- Vista: Cola -->
+    <section id="queueView" class="view">
+        <h2>Cola de registros</h2>
+        <div id="queueList" class="queue-list"></div>
+
+        <div class="fill-section" id="fillSection" style="display:none;">
+            <h3>Cargar al formulario Duoc</h3>
+            <p class="instructions">
+                1. Abre el formulario de Duoc en otra pestana<br>
+                2. Vuelve aqui y toca "Copiar siguiente"<br>
+                3. Ve al formulario y toca el bookmarklet "Pegar Duoc"<br>
+                4. Revisa y toca Enviar en el formulario de Duoc<br>
+                5. Repite desde el paso 2
+            </p>
+            <button class="btn btn-success" id="btnCopyNext">Copiar siguiente registro</button>
+            <div class="current-record-info" id="currentRecordInfo"></div>
+            
+            <div class="bookmarklet-section">
+                <p class="instructions">Arrastra este boton a tus favoritos (PC) o agregalo como marcador (celular):</p>
+                <a class="bookmarklet-link" id="bookmarkletLink" href="#">&#128279; Pegar Duoc</a>
+                <details class="help-details">
+                    <summary>Como agregar en celular</summary>
+                    <ol>
+                        <li>Copia el link del bookmarklet (manten presionado > copiar)</li>
+                        <li>Crea un marcador cualquiera</li>
+                        <li>Edita el marcador y pega la URL copiada</li>
+                        <li>Cuando estes en el formulario de Duoc, abre ese marcador</li>
+                    </ol>
+                </details>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="btnExportJSON">Exportar JSON</button>
+            <button class="btn btn-danger" id="btnClearQueue">Limpiar cola</button>
+        </div>
+    </section>
+
+    <!-- Navegacion inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-view="captureView">
+            <span class="nav-icon">&#128247;</span>
+            <span>Captura</span>
+        </button>
+        <button class="nav-btn" data-view="queueView">
+            <span class="nav-icon">&#128203;</span>
+            <span>Cola (<span id="navQueueCount">0</span>)</span>
+        </button>
+    </nav>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
