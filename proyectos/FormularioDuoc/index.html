@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -22,9 +22,24 @@
     <section id="settingsView" class="view">
         <h2>Configuracion</h2>
         <div class="form-group">
-            <label>API Key de Gemini</label>
+            <label>Proveedor / Estrategia OCR</label>
+            <select id="providerSelect">
+                <option value="auto">Cascada Automática (Tesseract -> Groq -> Gemini)</option>
+                <option value="omniroute">OmniRoute Local (Auto-fallback entre proveedores)</option>
+                <option value="tesseract">Tesseract.js (100% Local - Gratis y Sin Límites)</option>
+                <option value="groq">Groq Cloud API (Llama 3.2 Vision - Gratuito)</option>
+                <option value="gemini">Google Gemini API (Gratuito)</option>
+            </select>
+        </div>
+        <div class="form-group" id="apiKeyGroup">
+            <label id="apiKeyLabel">API Key (Gemini / Groq)</label>
             <input type="password" id="apiKeyInput" placeholder="Pega tu API key aqui">
-            <small>Obtenla gratis en <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a></small>
+            <small id="apiKeyHelp">Obtenla gratis en <a href="https://aistudio.google.com/apikey" target="_blank" id="apiKeyLink">aistudio.google.com</a></small>
+        </div>
+        <div class="form-group" id="omniServerGroup" style="display:none;">
+            <label>Servidor / URL de OmniRoute</label>
+            <input type="text" id="omniServerInput" placeholder="http://localhost:20128 o URL pública (Tunnel/Cloud)">
+            <small>Si usas ngrok o un VPS, coloca la dirección pública (ej: <code>https://mi-omni.ngrok-free.app</code>)</small>
         </div>
         <div class="form-group">
             <label>URL del formulario Duoc (con token del evento)</label>
@@ -37,10 +52,11 @@
     <!-- Vista: Captura -->
     <main id="captureView" class="view active">
         <div class="capture-area">
+            <div id="stepIndicator" style="display:none;text-align:center;padding:8px 12px;background:rgba(102,126,234,0.15);border-radius:8px;margin-bottom:10px;font-size:0.9rem;font-weight:600;color:#667eea;"></div>
             <div class="upload-box" id="uploadBox">
                 <div class="upload-icon">&#128247;</div>
                 <p>Toca para sacar foto o subir imagen</p>
-                <input type="file" id="imageInput" accept="image/*" capture="environment">
+                <input type="file" id="imageInput" accept="image/*">
             </div>
             <div class="preview-container" id="previewContainer" style="display:none;">
                 <img id="previewImage" src="" alt="Preview">
@@ -218,6 +234,7 @@
     </nav>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
