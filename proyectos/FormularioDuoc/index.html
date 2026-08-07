@@ -189,27 +189,70 @@
         <div id="queueList" class="queue-list"></div>
 
         <div class="fill-section" id="fillSection" style="display:none;">
-            <h3>Cargar al formulario Duoc</h3>
-            <p class="instructions">
-                1. Abre el formulario de Duoc en otra pestana<br>
-                2. Vuelve aqui y toca "Copiar siguiente"<br>
-                3. Ve al formulario y toca el bookmarklet "Pegar Duoc"<br>
-                4. Revisa y toca Enviar en el formulario de Duoc<br>
-                5. Repite desde el paso 2
-            </p>
+            <h3>Como cargar al formulario Duoc</h3>
+            
+            <div class="step-guide">
+                <div class="step-item">
+                    <span class="step-num">1</span>
+                    <div class="step-content">
+                        <strong>Prepara el formulario</strong>
+                        <p>Abre el formulario de Duoc en otra pestana de tu navegador y deja la pagina lista.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">2</span>
+                    <div class="step-content">
+                        <strong>Copia el registro</strong>
+                        <p>Toca el boton <em>"Copiar siguiente registro"</em>. La app guarda los datos <strong>y abre el formulario de Duoc automaticamente en una pestana nueva</strong>.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">3</span>
+                    <div class="step-content">
+                        <strong>Pega en el formulario</strong>
+                        <p>En la pestana del formulario Duoc que se abrio, toca el marcador/bookmarklet <em>"Pegar Duoc"</em> (agregado previamente a favoritos). Los campos se llenaran solos.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">4</span>
+                    <div class="step-content">
+                        <strong>Revisa y envia</strong>
+                        <p>Verifica que todos los datos esten correctos (especialmente los desplegables), completa lo que falte y toca el boton Enviar del formulario.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">5</span>
+                    <div class="step-content">
+                        <strong>Repite</strong>
+                        <p>Vuelve al paso 2 con el siguiente registro. La app te dice cual estas copiando (#1, #2, #3...).</p>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn btn-success" id="btnCopyNext">Copiar siguiente registro</button>
             <div class="current-record-info" id="currentRecordInfo"></div>
             
             <div class="bookmarklet-section">
-                <p class="instructions">Arrastra este boton a tus favoritos (PC) o agregalo como marcador (celular):</p>
+                <p class="instructions">Para que el formulario se llene solo, primero debes agregar este boton a tus favoritos:</p>
                 <a class="bookmarklet-link" id="bookmarkletLink" href="#">&#128279; Pegar Duoc</a>
                 <details class="help-details">
-                    <summary>Como agregar en celular</summary>
+                    <summary>📱 Como agregar en celular</summary>
                     <ol>
-                        <li>Copia el link del bookmarklet (manten presionado > copiar)</li>
-                        <li>Crea un marcador cualquiera</li>
-                        <li>Edita el marcador y pega la URL copiada</li>
-                        <li>Cuando estes en el formulario de Duoc, abre ese marcador</li>
+                        <li>Toca el boton <strong>"Pegar Duoc"</strong> de arriba y mantente presionado hasta que salga la opcion <em>"Copiar enlace"</em></li>
+                        <li>Copia el enlace</li>
+                        <li>Abre la pagina del formulario de Duoc</li>
+                        <li>Toca el menu del navegador (⋮) y elige <em>"Agregar a marcadores"</em></li>
+                        <li>En el nombre pon <strong>Pegar Duoc</strong>, guardalo</li>
+                        <li>Edita ese marcador (manten presionado > editar) y <strong>pégalo en el campo URL</strong></li>
+                        <li>Cuando estes llenando el formulario, abre el marcador desde el menu de favoritos y listo</li>
+                    </ol>
+                </details>
+                <details class="help-details">
+                    <summary>💻 Como agregar en PC</summary>
+                    <ol>
+                        <li>Arrastra el boton <strong>"Pegar Duoc"</strong> hacia la barra de favoritos de tu navegador</li>
+                        <li>Sueltalo ahi y quedara guardado como marcador</li>
+                        <li>Cuando estes en el formulario de Duoc, toca ese marcador en tu barra de favoritos</li>
                     </ol>
                 </details>
             </div>
@@ -217,6 +260,7 @@
 
         <div class="action-buttons">
             <button class="btn btn-secondary" id="btnExportJSON">Exportar JSON</button>
+            <button class="btn btn-success" id="btnExportTXT">Exportar TXT</button>
             <button class="btn btn-danger" id="btnClearQueue">Limpiar cola</button>
         </div>
     </section>
@@ -232,6 +276,7 @@
             <span>Cola (<span id="navQueueCount">0</span>)</span>
         </button>
     </nav>
+    <footer class="app-version">v0.0.7</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
