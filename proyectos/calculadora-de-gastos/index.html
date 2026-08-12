@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Gastos</title>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <!-- LOADING SCREEN -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <!-- AUTH SCREEN -->
+  <div class="auth-screen" id="authScreen" style="display:none">
+    <div class="auth-card">
+      <h2>💰 Calculadora de Gastos</h2>
+      <p>Inicia sesion o crea una cuenta para sincronizar tus datos</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuth('login', this)">Iniciar Sesion</button>
+        <button class="auth-tab" onclick="switchAuth('register', this)">Registrarse</button>
+      </div>
+
+      <div class="auth-err" id="authErr"></div>
+      <div class="auth-ok" id="authOk"></div>
+      <div class="fg"><label>Correo electronico</label>
+        <input type="email" id="authEmail" placeholder="tu@email.com"></div>
+      <div class="fg"><label>Contrasena</label>
+        <div style="position:relative">
+          <input type="password" id="authPass" placeholder="Minimo 6 caracteres" style="padding-right:40px">
+          <button type="button" onclick="togglePassVisibility('authPass',this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--tm)">👁️</button>
+        </div>
+      </div>
+      <div class="fg" id="authPassConfirmWrap" style="display:none"><label>Confirmar contrasena</label>
+        <div style="position:relative">
+          <input type="password" id="authPassConfirm" placeholder="Repite tu contrasena" style="padding-right:40px">
+          <button type="button" onclick="togglePassVisibility('authPassConfirm',this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--tm)">👁️</button>
+        </div>
+      </div>
+      <button class="bp" style="width:100%;padding:12px;font-size:1rem;margin-top:6px" id="authBtn" onclick="doAuth()">Iniciar Sesion</button>
+      <p style="text-align:center;margin-top:12px">
+        <a href="#" onclick="doResetPassword()" style="color:var(--ac);font-size:.82rem;text-decoration:none;font-weight:500">¿Olvidaste tu contrasena?</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN APP (hidden until authenticated) -->
+  <div id="mainApp" style="display:none">
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>💰 Menu</h3>
+      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-icon">👤</div>
+      <div class="sidebar-user-email" id="userEmail">user@email.com</div>
+    </div>
+    <div class="sidebar-section">Tema</div>
+    <div class="sidebar-theme">
+      <span id="tLabel">Modo Oscuro</span>
+      <div class="tt" onclick="toggleTheme()">
+        <div class="trk"><div class="knb" id="tKnob">🌙</div></div>
+      </div>
+    </div>
+    <div class="sidebar-section">Navegacion</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-item active" onclick="switchTab('hogar',this)">
+        <span class="si-icon">🏠</span> Hogar
+      </button>
+      <button class="sidebar-item" onclick="switchTab('personal',this)">
+        <span class="si-icon">👤</span> Personal
+      </button>
+      <button class="sidebar-item" onclick="switchTab('metas',this)">
+        <span class="si-icon">🎯</span> Metas
+      </button>
+      <button class="sidebar-item" onclick="switchTab('resumen',this)">
+        <span class="si-icon">📅</span> Resumen Mensual
+      </button>
+      <button class="sidebar-item" onclick="switchTab('calc',this)">
+        <span class="si-icon">🧮</span> Calculadora
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="sidebarDate" onclick="toggleCalendar()" style="text-align:center;padding:10px;margin-bottom:12px;background:var(--sub);border-radius:10px;cursor:pointer;border:1px solid var(--bdr);transition:all .2s">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tm);margin-bottom:4px">📅 Hoy</div>
+        <div id="sidebarDateText" style="font-size:.9rem;font-weight:700;color:var(--t1)"></div>
+      </div>
+      <div id="calendarPopup" style="display:none;background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 8px 24px var(--sh)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <button onclick="calNavMonth(-1)" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--t1);padding:4px 8px">◀</button>
+          <span id="calMonthYear" style="font-size:.85rem;font-weight:700;color:var(--t1)"></span>
+          <button onclick="calNavMonth(1)" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--t1);padding:4px 8px">▶</button>
+        </div>
+        <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center"></div>
+      </div>
+      <button class="sidebar-logout" onclick="doLogout()">🚪 Cerrar Sesion</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <h1>💰 Calculadora de Gastos</h1>
+    <button class="menu-btn" onclick="openSidebar()">☰</button>
+  </div>
+
+  <!-- PANEL HOGAR -->
+  <div class="panel active" id="panel-hogar">
+    <div class="card">
+      <h2>👥 Integrantes del Hogar</h2>
+      <div class="fr">
+        <div class="fg"><label>Nombre</label>
+          <input type="text" id="iNombre" placeholder="Ej: Maria"></div>
+        <div class="fg"><label>Ingreso mensual ($)</label>
+          <input type="text" id="iIngreso" placeholder="Ej: 800.000" min="0" inputmode="numeric"></div>
+        <button class="bp" onclick="addInt()">Agregar</button>
+      </div>
+      <div id="emptyInt" class="empty">Agrega integrantes para comenzar</div>
+      <div class="tw" id="wrapInt" style="display:none">
+        <table><thead><tr>
+          <th>Nombre</th><th>Ingreso</th>
+          <th class="col-prop">Proporcion</th><th></th>
+        </tr></thead><tbody id="bodyInt"></tbody></table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>💸 Gastos del Hogar</h2>
+      <p style="font-size:.8rem;color:var(--t2);margin-bottom:12px">Se calculan automaticamente desde tus gastos fijos/recurrentes registrados en Personal (Vivienda, Servicios, Alimentacion, Transporte, Educacion, Salud)</p>
+      <div id="emptyGasAuto" class="empty">No hay gastos fijos registrados este mes. Ve a Personal y agrega gastos marcados como "Recurrente".</div>
+      <div class="tw" id="wrapGas" style="display:none">
+        <table><thead><tr><th>Descripcion</th><th>Categoria</th><th>Monto</th></tr></thead>
+        <tbody id="bodyGas"></tbody></table>
+      </div>
+      <div class="tbox" id="tboxGas" style="display:none">
+        <span class="tl">Total Gastos Hogar:</span>
+        <span class="tv" id="tvGas">$0</span>
+      </div>
+    </div>
+
+    <div class="acts">
+      <button class="bc" onclick="calcular()">📊 Calcular Distribucion</button>
+      <button class="bcl" onclick="limpiarHogar()">🗑️ Limpiar Integrantes</button>
+    </div>
+
+    <div class="card" id="resCard" style="display:none">
+      <h2>📋 Distribucion Proporcional</h2>
+      <div id="resBody"></div>
+    </div>
+  </div>
+
+  <!-- PANEL PERSONAL -->
+  <div class="panel" id="panel-personal">
+    <div class="pgrid">
+      <div class="pc"><div class="pl">💰 Ingresos</div>
+        <div class="pv pvi" id="pIngresos">$0</div></div>
+      <div class="pc"><div class="pl">💸 Gastos</div>
+        <div class="pv pvg" id="pGastos">$0</div></div>
+      <div class="pc"><div class="pl">📊 Balance</div>
+        <div class="pv pvb" id="pBalance">$0</div></div>
+    </div>
+
+    <!-- FORMULARIO AGREGAR MOVIMIENTO -->
+    <div class="card">
+      <h2>➕ Agregar movimiento</h2>
+      <div class="fr fr3">
+        <div class="fg"><label>Descripcion</label>
+          <input type="text" id="pDesc" placeholder="Ej: Arriendo, Sueldo..."></div>
+        <div class="fg"><label>Monto ($)</label>
+          <div style="position:relative">
+            <input type="text" id="pMonto" placeholder="0" min="0" inputmode="numeric" style="padding-right:40px">
+            <button type="button" onclick="openMiniCalc()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--tm);width:auto !important;min-width:0;box-shadow:none !important" title="Calculadora">🧮</button>
+          </div>
+        </div>
+        <div class="fg"><label>Categoria</label>
+          <select id="pCat"></select></div>
+        <div class="fg"><label>Tipo</label>
+          <select id="pTipo">
+            <option value="gasto">🔴 Gasto</option>
+            <option value="ingreso">🟢 Ingreso</option>
+          </select></div>
+        <button class="bp" onclick="addMov()">Agregar</button>
+      </div>
+      <div style="margin-top:4px">
+        <label style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;cursor:pointer;color:var(--t2);user-select:none">
+          <input type="checkbox" id="pRecurrente" style="width:auto"> 🔄 Marcar como Gasto Fijo / Recurrente mensual
+        </label>
+      </div>
+    </div>
+
+    <!-- FILTROS Y LISTA -->
+    <div class="pfilter-bar">
+      <button class="tab active" style="background:rgba(255,255,255,.2);color:#fff;border-radius:100px" onclick="filtrarP('todos',this)">Todos</button>
+      <button class="tab" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:100px" onclick="filtrarP('gasto',this)">Solo gastos</button>
+      <button class="tab" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:100px" onclick="filtrarP('ingreso',this)">Solo ingresos</button>
+      <input type="text" id="pBuscar" placeholder="🔍 Buscar..." style="flex:1;min-width:120px;padding:8px 12px;font-size:.82rem;border-radius:100px;border:1px solid var(--bdr);background:var(--card);color:var(--t1)" oninput="renderP()">
+      <button class="bcl" style="margin-left:auto;padding:6px 14px;font-size:.82rem" onclick="limpiarPersonal()">🗑 Limpiar</button>
+    </div>
+    <div class="mlista" id="pLista"></div>
+
+
+    <!-- GRAFICO POR CATEGORIA -->
+    <div id="pCatWrap" style="display:none;margin-top:16px" class="card">
+      <h2>📊 Gastos por categoria</h2>
+      <div id="pDonutChart"></div>
+      <div id="pCatLista" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- PANEL METAS -->
+  <div class="panel" id="panel-metas">
+    <div class="card">
+      <h2>🎯 Metas Financieras</h2>
+      <p style="font-size:.8rem;color:var(--t2);margin-bottom:14px">Basado en tus ingresos mensuales de <strong id="metaSueldo">$0</strong></p>
+      <div id="metasNoData" class="empty" style="display:none">Registra ingresos en la pestaña Personal para ver tus metas</div>
+      <div id="metasBody" style="display:flex;flex-direction:column;gap:12px">
+        <div style="padding:14px;background:var(--sub);border-radius:10px;border-left:4px solid var(--gr)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:20px">💰</span>
+            <div style="flex:1">
+              <div style="font-size:.72rem;font-weight:700;color:var(--tm);text-transform:uppercase">Ahorro Mensual</div>
+              <div style="font-size:.85rem;color:var(--t2)">Meta: <strong id="metaAhorroTarget">$0</strong> (10% del sueldo)</div>
+            </div>
+            <button class="bs" style="padding:5px 10px;font-size:.75rem" onclick="addToMeta('ahorro')">+ Asignar</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--tm);margin-bottom:4px">
+            <span>Asignado este mes: <strong id="metaAhorroActual" style="color:var(--gr)">$0</strong></span>
+            <span id="metaAhorroPct">0%</span>
+          </div>
+          <div class="bbg"><div class="bfill" id="metaAhorroBarra" style="width:0%"></div></div>
+        </div>
+        <div style="padding:14px;background:var(--sub);border-radius:10px;border-left:4px solid #ec4899">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:20px">🎉</span>
+            <div style="flex:1">
+              <div style="font-size:.72rem;font-weight:700;color:var(--tm);text-transform:uppercase">Gustos y Salidas</div>
+              <div style="font-size:.85rem;color:var(--t2)">Maximo: <strong id="metaGustosTarget">$0</strong> (20% del sueldo)</div>
+            </div>
+            <span style="font-size:.65rem;background:rgba(236,72,153,0.12);color:#ec4899;padding:3px 8px;border-radius:4px;font-weight:700">AUTO</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--tm);margin-bottom:6px">Se calcula desde: Entretenimiento, Ropa</div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--tm);margin-bottom:4px">
+            <span>Gastado este mes: <strong id="metaGustosActual" style="color:#ec4899">$0</strong></span>
+            <span id="metaGustosPct">0%</span>
+          </div>
+          <div class="bbg"><div class="bfill" id="metaGustosBarra" style="width:0%"></div></div>
+        </div>
+        <div style="padding:14px;background:var(--sub);border-radius:10px;border-left:4px solid var(--rd)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:20px">🏠</span>
+            <div style="flex:1">
+              <div style="font-size:.72rem;font-weight:700;color:var(--tm);text-transform:uppercase">Gastos Fijos</div>
+              <div style="font-size:.85rem;color:var(--t2)">Tope: <strong id="metaFijosTarget">$0</strong> (70% del sueldo)</div>
+            </div>
+            <span style="font-size:.65rem;background:rgba(235,51,73,0.12);color:var(--rd);padding:3px 8px;border-radius:4px;font-weight:700">AUTO</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--tm);margin-bottom:6px">Se calcula desde: Vivienda, Alimentacion, Transporte, Servicios, Educacion, Salud (marcados como fijos)</div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--tm);margin-bottom:4px">
+            <span>Gastado este mes: <strong id="metaFijosActual" style="color:var(--rd)">$0</strong></span>
+            <span id="metaFijosPct">0%</span>
+          </div>
+          <div class="bbg"><div class="bfill" id="metaFijosBarra" style="width:0%"></div></div>
+          <div id="metaFijosAlert" style="display:none;margin-top:8px;font-size:.78rem;font-weight:600;color:var(--rd)"></div>
+        </div>
+        <div style="padding:14px;background:var(--sub);border-radius:10px;border-left:4px solid var(--yw)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:20px">🛡️</span>
+            <div style="flex:1">
+              <div style="font-size:.72rem;font-weight:700;color:var(--tm);text-transform:uppercase">Fondo de Emergencia</div>
+              <div style="font-size:.85rem;color:var(--t2)">Meta: <strong id="metaEmergenciaTarget">$0</strong> (4 sueldos)</div>
+            </div>
+            <button class="bs" style="padding:5px 10px;font-size:.75rem;background:linear-gradient(135deg,var(--yw),var(--yw2))" onclick="addToMeta('emergencia')">+ Agregar</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--tm);margin-bottom:4px">
+            <span>Acumulado: <strong id="metaEmergenciaActual" style="color:#d97706">$0</strong></span>
+            <span id="metaEmergenciaPct">0%</span>
+          </div>
+          <div class="bbg"><div class="bfill" id="metaEmergenciaBarra" style="width:0%;background:linear-gradient(90deg,var(--yw),var(--yw2))"></div></div>
+        </div>
+        <div style="padding:14px;background:var(--sub);border-radius:10px;border-left:4px solid var(--ac)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:20px">🏦</span>
+            <div style="flex:1">
+              <div style="font-size:.72rem;font-weight:700;color:var(--tm);text-transform:uppercase">Meta de Inversion (Libertad Financiera)</div>
+              <div style="font-size:.85rem;color:var(--t2)">Meta: <strong id="metaInversionTarget">$0</strong> (200 sueldos)</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--tm);margin-bottom:4px">
+            <span>Proyeccion desde ahorro mensual: <strong id="metaInversionProyeccion" style="color:var(--ac)">— meses</strong></span>
+            <span id="metaInversionPct">0%</span>
+          </div>
+          <div class="bbg"><div class="bfill" id="metaInversionBarra" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- PRESUPUESTOS POR CATEGORIA -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <h2 style="margin-bottom:0;border-bottom:none;padding-bottom:0">📋 Presupuestos por Categoria</h2>
+        <button class="bs" style="padding:6px 12px;font-size:.8rem" onclick="addCategoryBudget()">+ Definir tope</button>
+      </div>
+      <p style="font-size:.78rem;color:var(--tm);margin-top:6px;margin-bottom:14px">Define un limite mensual para cada categoria y controla tu gasto</p>
+      <div id="catBudgetsEmpty" class="empty">No hay presupuestos definidos. Usa "+ Definir tope" para agregar uno.</div>
+      <div id="catBudgetsList" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+
+  <!-- PANEL RESUMEN MENSUAL -->
+  <div class="panel" id="panel-resumen">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h2 style="margin-bottom:0;border-bottom:none;padding-bottom:0">📅 Resumen Mensual</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="bs" style="padding:6px 12px;font-size:0.8rem" onclick="clonarFijosMes()">🔄 Cargar Gastos Fijos</button>
+          <button class="bp" style="padding:6px 12px;font-size:0.8rem" onclick="exportarCSV()">📥 Exportar CSV</button>
+          <button style="padding:6px 12px;font-size:0.8rem;background:var(--sub);border:1px solid var(--bdr);border-radius:8px;color:var(--t2);cursor:pointer" onclick="configurarCiclo()">⚙️ Ciclo: dia <span id="cycleLabel">1</span></button>
+          <button style="padding:6px 12px;font-size:0.8rem;background:var(--sub);border:1px solid var(--bdr);border-radius:8px;color:var(--t2);cursor:pointer" onclick="exportarBackup()">💾 Backup</button>
+          <button style="padding:6px 12px;font-size:0.8rem;background:var(--sub);border:1px solid var(--bdr);border-radius:8px;color:var(--t2);cursor:pointer" onclick="importarBackup()">📂 Restaurar</button>
+        </div>
+
+      </div>
+      <div class="fr fr-resumen">
+        <div class="fg"><label>Mes</label>
+          <select id="rMes">
+            <option value="0">Enero</option><option value="1">Febrero</option>
+            <option value="2">Marzo</option><option value="3">Abril</option>
+            <option value="4">Mayo</option><option value="5">Junio</option>
+            <option value="6">Julio</option><option value="7">Agosto</option>
+            <option value="8">Septiembre</option><option value="9">Octubre</option>
+            <option value="10">Noviembre</option><option value="11">Diciembre</option>
+          </select>
+        </div>
+        <div class="fg"><label>Ano</label><select id="rAnio"></select></div>
+        <button class="bp" onclick="renderResumen()">Ver resumen</button>
+      </div>
+    </div>
+    <div class="sgrid" id="rStats" style="margin-bottom:16px"></div>
+    <div class="card" id="rCatCard" style="display:none">
+      <h2>📊 Gastos por categoria</h2>
+      <div id="rDonutChart"></div>
+      <div id="rCatBody" style="margin-top:12px"></div>
+    </div>
+    <div class="card" id="rMovCard" style="display:none">
+      <h2>📋 Movimientos del mes</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Fecha</th><th>Descripcion</th><th>Categoria</th><th>Tipo</th><th>Monto</th><th></th></tr></thead>
+          <tbody id="rMovBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="rEmpty" class="card" style="display:none">
+      <div class="empty"><span style="font-size:32px;display:block;margin-bottom:10px">📭</span>
+        No hay movimientos registrados en este periodo.</div>
+    </div>
+  </div>
+
+  <!-- PANEL CALCULADORA -->
+  <div class="panel" id="panel-calc">
+    <div class="card">
+      <h2>🧮 Calculadora</h2>
+      <div id="calcDisplay" style="background:var(--sub);border:2px solid var(--bdr);border-radius:10px;padding:16px 20px;margin-bottom:16px;text-align:right;min-height:70px;display:flex;flex-direction:column;justify-content:center">
+        <div id="calcExpr" style="font-size:.8rem;color:var(--tm);min-height:18px;word-break:break-all"></div>
+        <div id="calcResult" style="font-size:1.8rem;font-weight:800;color:var(--t1);word-break:break-all">0</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <button class="calc-btn calc-op" onclick="calcInput('C')">C</button>
+        <button class="calc-btn calc-op" onclick="calcInput('⌫')">⌫</button>
+        <button class="calc-btn calc-op" onclick="calcInput('%')">%</button>
+        <button class="calc-btn calc-op" onclick="calcInput('÷')">÷</button>
+        <button class="calc-btn" onclick="calcInput('7')">7</button>
+        <button class="calc-btn" onclick="calcInput('8')">8</button>
+        <button class="calc-btn" onclick="calcInput('9')">9</button>
+        <button class="calc-btn calc-op" onclick="calcInput('×')">×</button>
+        <button class="calc-btn" onclick="calcInput('4')">4</button>
+        <button class="calc-btn" onclick="calcInput('5')">5</button>
+        <button class="calc-btn" onclick="calcInput('6')">6</button>
+        <button class="calc-btn calc-op" onclick="calcInput('-')">−</button>
+        <button class="calc-btn" onclick="calcInput('1')">1</button>
+        <button class="calc-btn" onclick="calcInput('2')">2</button>
+        <button class="calc-btn" onclick="calcInput('3')">3</button>
+        <button class="calc-btn calc-op" onclick="calcInput('+')">+</button>
+        <button class="calc-btn" style="grid-column:span 2" onclick="calcInput('0')">0</button>
+        <button class="calc-btn" onclick="calcInput('.')">.</button>
+        <button class="calc-btn calc-eq" onclick="calcInput('=')">=</button>
+      </div>
+      <button onclick="copyCalcToMonto()" style="margin-top:12px;width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">📋 Copiar a Monto</button>
+    </div>
+  </div>
+
+  </div><!-- end mainApp -->
+</div><!-- end wrap -->
+
+<!-- MODAL REUTILIZABLE DE EDICION -->
+<div class="modal" id="editModal" style="display:none">
+  <div class="modal-card">
+    <div class="modal-hdr">
+      <h3 id="modalTitle">✏️ Editar Registro</h3>
+      <button class="bdel" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-ftr">
+      <button class="bp" id="modalSaveBtn">Guardar cambios</button>
+      <button class="bcl" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT PRINCIPAL -->
+<script src="js/app.js"></script>
+</body>
+</html>
