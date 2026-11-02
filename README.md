@@ -19,11 +19,18 @@ El proyecto aborda la modificación y reparación especializada de vehículos 4x
 ## Estructura del proyecto
 
 ```
-├── index.html          # Informe APT completo (página principal)
-├── portfolio.html      # Portfolio personal Bryan Palma
-├── img/                # Imágenes del informe (cotizaciones, layout, tablas)
-└── docs/               # Documentos fuente (.docx, .pdf)
+informe-apt-xtreme4x4/
+├── index.html              # Informe APT completo (página principal)
+├── portfolio.html          # Portfolio personal Bryan Palma
+├── img/                    # Imágenes del informe (cotizaciones, layout, tablas)
+├── docs/                   # Documentos fuente (.docx, .pdf)
+├── proyectos/              # Proyectos relacionados
+└── calculadora-gastos/     # Calculadora de gastos integrada
 ```
+
+## Ver el informe
+
+Abre `index.html` en el navegador. Incluye botón **"Exportar PDF"** para generar el informe en formato A4.
 
 ## Contenido del informe
 
@@ -36,10 +43,6 @@ El proyecto aborda la modificación y reparación especializada de vehículos 4x
 7. Resultados e impacto financiero
 8. Cierre y proyecciones laborales
 
-## Ver el informe
-
-Abre `informe-apt.html` en el navegador. Incluye botón **"Exportar PDF"** para generar el informe en formato A4.
-
 ## Datos financieros clave
 
 | Concepto | Valor |
@@ -48,3 +51,9 @@ Abre `informe-apt.html` en el navegador. Incluye botón **"Exportar PDF"** para 
 | Costos fijos mensuales | $4.640.867 CLP |
 | Punto de equilibrio | 56 vehículos/mes |
 | Inicio de rentabilidad | Mes 7 |
+
+## Stack
+
+- HTML / CSS puro con diseño dark (tema naranja/negro)
+- Sin dependencias externas — abre directamente en el navegador
+- Exportación a PDF vía `window.print()` con estilos de impresión A4
